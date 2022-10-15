@@ -7,20 +7,6 @@ import { graphQLSchemaExtension } from '@keystone-6/core';
 const graphql = String.raw;
 
 export const extendGraphqlSchema = graphQLSchemaExtension({
-  typeDefs: graphql`
-    type Mutation {
-      # TODO
-    }
-    type Query {
-      # TODO
-    }
-  `,
-  resolvers: {
-    Mutation: {
-      // TODO
-    },
-    Query: {
-      // TODO
-    },
-  },
+  typeDefs: graphql``,
+  resolvers: {},
 });

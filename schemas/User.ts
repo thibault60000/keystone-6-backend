@@ -30,27 +30,31 @@ export const User = list({
       },
       label: 'Photo',
     }),
-    cart: relationship({
-      ref: 'CartItem.user',
-      many: true,
-      ui: {
-        createView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'read' },
-      },
-    }),
+
+    // cart: relationship({
+    //   ref: 'CartItem.user',
+    //   many: true,
+    //   ui: {
+    //     createView: { fieldMode: 'hidden' },
+    //     itemView: { fieldMode: 'read' },
+    //   },
+    // }),
+
     // Order
-    orders: relationship({
-      ref: 'Order.user',
-      many: true,
-    }),
+    // orders: relationship({
+    //   ref: 'Order.user',
+    //   many: true,
+    // }),
+
     // Role
-    role: relationship({
-      ref: 'Role.assignedTo',
-    }),
+    // role: relationship({
+    //   ref: 'Role.assignedTo',
+    // }),
+
     // Products
-    products: relationship({
-      ref: 'Product.user',
-      many: true,
-    }),
+    // products: relationship({
+    //   ref: 'Product.user',
+    //   many: true,
+    // }),
   },
 });
