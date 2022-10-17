@@ -2,6 +2,7 @@ import {
   calendarDay,
   checkbox,
   float,
+  image,
   integer,
   relationship,
   text,
@@ -29,16 +30,7 @@ export const Gift = list({
       validation: { isRequired: true },
       label: 'Degré',
     }),
-    image: relationship({
-      ref: 'GiftImage.gift',
-      ui: {
-        displayMode: 'cards',
-        cardFields: ['image', 'altText'],
-        inlineCreate: { fields: ['image', 'altText'] },
-        inlineEdit: { fields: ['image', 'altText'] },
-      },
-      label: 'Image',
-    }),
+    image: image({ storage: 's3_images' }),
     color: text({
       label: 'Couleur',
     }),
@@ -78,5 +70,10 @@ export const Gift = list({
           },
       },
     }),
+  },
+  ui: {
+    listView: {
+      initialColumns: ['name', 'price', 'degree', 'image', 'reserved'],
+    },
   },
 });

@@ -7,7 +7,7 @@ type User {
   isAdmin: Boolean
   email: String
   password: PasswordState
-  photo: UserImage
+  photo: ImageFieldOutput
   lists(
     where: ListWhereInput! = {}
     orderBy: [ListOrderByInput!]! = []
@@ -31,6 +31,22 @@ type PasswordState {
   isSet: Boolean!
 }
 
+type ImageFieldOutput {
+  id: ID!
+  filesize: Int!
+  width: Int!
+  height: Int!
+  extension: ImageExtension!
+  url: String!
+}
+
+enum ImageExtension {
+  jpg
+  png
+  webp
+  gif
+}
+
 scalar DateTime
   @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
 
@@ -48,7 +64,6 @@ input UserWhereInput {
   isAdmin: BooleanFilter
   email: StringFilter
   password: PasswordFilter
-  photo: UserImageWhereInput
   lists: ListManyRelationFilter
   gifts: GiftManyRelationFilter
   passwordResetToken: PasswordFilter
@@ -152,7 +167,7 @@ input UserUpdateInput {
   isAdmin: Boolean
   email: String
   password: String
-  photo: UserImageRelateToOneForUpdateInput
+  photo: ImageFieldInput
   lists: ListRelateToManyForUpdateInput
   gifts: GiftRelateToManyForUpdateInput
   passwordResetToken: String
@@ -160,11 +175,14 @@ input UserUpdateInput {
   passwordResetRedeemedAt: DateTime
 }
 
-input UserImageRelateToOneForUpdateInput {
-  create: UserImageCreateInput
-  connect: UserImageWhereUniqueInput
-  disconnect: Boolean
+input ImageFieldInput {
+  upload: Upload!
 }
+
+"""
+The `Upload` scalar type represents a file upload.
+"""
+scalar Upload
 
 input ListRelateToManyForUpdateInput {
   disconnect: [ListWhereUniqueInput!]
@@ -190,17 +208,12 @@ input UserCreateInput {
   isAdmin: Boolean
   email: String
   password: String
-  photo: UserImageRelateToOneForCreateInput
+  photo: ImageFieldInput
   lists: ListRelateToManyForCreateInput
   gifts: GiftRelateToManyForCreateInput
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
-}
-
-input UserImageRelateToOneForCreateInput {
-  create: UserImageCreateInput
-  connect: UserImageWhereUniqueInput
 }
 
 input ListRelateToManyForCreateInput {
@@ -211,113 +224,6 @@ input ListRelateToManyForCreateInput {
 input GiftRelateToManyForCreateInput {
   create: [GiftCreateInput!]
   connect: [GiftWhereUniqueInput!]
-}
-
-type UserImage {
-  id: ID!
-  image: CloudinaryImage_File
-  altText: String
-  user: User
-}
-
-type CloudinaryImage_File {
-  id: ID
-  filename: String
-  originalFilename: String
-  mimetype: String
-  encoding: String
-  publicUrl: String
-  publicUrlTransformed(transformation: CloudinaryImageFormat): String
-}
-
-"""
-Mirrors the formatting options [Cloudinary provides](https://cloudinary.com/documentation/image_transformation_reference).
-All options are strings as they ultimately end up in a URL.
-"""
-input CloudinaryImageFormat {
-  """
-  Rewrites the filename to be this pretty string. Do not include `/` or `.`
-  """
-  prettyName: String
-  width: String
-  height: String
-  crop: String
-  aspect_ratio: String
-  gravity: String
-  zoom: String
-  x: String
-  y: String
-  format: String
-  fetch_format: String
-  quality: String
-  radius: String
-  angle: String
-  effect: String
-  opacity: String
-  border: String
-  background: String
-  overlay: String
-  underlay: String
-  default_image: String
-  delay: String
-  color: String
-  color_space: String
-  dpr: String
-  page: String
-  density: String
-  flags: String
-  transformation: String
-}
-
-input UserImageWhereUniqueInput {
-  id: ID
-}
-
-input UserImageWhereInput {
-  AND: [UserImageWhereInput!]
-  OR: [UserImageWhereInput!]
-  NOT: [UserImageWhereInput!]
-  id: IDFilter
-  altText: StringFilter
-  user: UserWhereInput
-}
-
-input UserImageOrderByInput {
-  id: OrderDirection
-  altText: OrderDirection
-}
-
-input UserImageUpdateInput {
-  image: Upload
-  altText: String
-  user: UserRelateToOneForUpdateInput
-}
-
-"""
-The `Upload` scalar type represents a file upload.
-"""
-scalar Upload
-
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
-input UserImageUpdateArgs {
-  where: UserImageWhereUniqueInput!
-  data: UserImageUpdateInput!
-}
-
-input UserImageCreateInput {
-  image: Upload
-  altText: String
-  user: UserRelateToOneForCreateInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 type List {
@@ -384,6 +290,12 @@ input ListCategoryRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
 input ListUpdateArgs {
   where: ListWhereUniqueInput!
   data: ListUpdateInput!
@@ -401,6 +313,11 @@ input ListCreateInput {
 input ListCategoryRelateToOneForCreateInput {
   create: ListCategoryCreateInput
   connect: ListCategoryWhereUniqueInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 type ListCategory {
@@ -471,7 +388,7 @@ type Gift {
   description: String
   quantity: Int
   degree: Int
-  image: GiftImage
+  image: ImageFieldOutput
   color: String
   size: String
   reserved: Boolean
@@ -496,7 +413,6 @@ input GiftWhereInput {
   description: StringFilter
   quantity: IntFilter
   degree: IntFilter
-  image: GiftImageWhereInput
   color: StringFilter
   size: StringFilter
   reserved: BooleanFilter
@@ -551,7 +467,7 @@ input GiftUpdateInput {
   description: String
   quantity: Int
   degree: Int
-  image: GiftImageRelateToOneForUpdateInput
+  image: ImageFieldInput
   color: String
   size: String
   reserved: Boolean
@@ -559,12 +475,6 @@ input GiftUpdateInput {
   date: CalendarDay
   reservedBy: String
   user: UserRelateToOneForUpdateInput
-}
-
-input GiftImageRelateToOneForUpdateInput {
-  create: GiftImageCreateInput
-  connect: GiftImageWhereUniqueInput
-  disconnect: Boolean
 }
 
 input GiftUpdateArgs {
@@ -579,7 +489,7 @@ input GiftCreateInput {
   description: String
   quantity: Int
   degree: Int
-  image: GiftImageRelateToOneForCreateInput
+  image: ImageFieldInput
   color: String
   size: String
   reserved: Boolean
@@ -587,64 +497,6 @@ input GiftCreateInput {
   date: CalendarDay
   reservedBy: String
   user: UserRelateToOneForCreateInput
-}
-
-input GiftImageRelateToOneForCreateInput {
-  create: GiftImageCreateInput
-  connect: GiftImageWhereUniqueInput
-}
-
-type GiftImage {
-  id: ID!
-  image: CloudinaryImage_File
-  altText: String
-  gift: Gift
-}
-
-input GiftImageWhereUniqueInput {
-  id: ID
-}
-
-input GiftImageWhereInput {
-  AND: [GiftImageWhereInput!]
-  OR: [GiftImageWhereInput!]
-  NOT: [GiftImageWhereInput!]
-  id: IDFilter
-  altText: StringFilter
-  gift: GiftWhereInput
-}
-
-input GiftImageOrderByInput {
-  id: OrderDirection
-  altText: OrderDirection
-}
-
-input GiftImageUpdateInput {
-  image: Upload
-  altText: String
-  gift: GiftRelateToOneForUpdateInput
-}
-
-input GiftRelateToOneForUpdateInput {
-  create: GiftCreateInput
-  connect: GiftWhereUniqueInput
-  disconnect: Boolean
-}
-
-input GiftImageUpdateArgs {
-  where: GiftImageWhereUniqueInput!
-  data: GiftImageUpdateInput!
-}
-
-input GiftImageCreateInput {
-  image: Upload
-  altText: String
-  gift: GiftRelateToOneForCreateInput
-}
-
-input GiftRelateToOneForCreateInput {
-  create: GiftCreateInput
-  connect: GiftWhereUniqueInput
 }
 
 """
@@ -662,15 +514,6 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
-  createUserImage(data: UserImageCreateInput!): UserImage
-  createUserImages(data: [UserImageCreateInput!]!): [UserImage]
-  updateUserImage(
-    where: UserImageWhereUniqueInput!
-    data: UserImageUpdateInput!
-  ): UserImage
-  updateUserImages(data: [UserImageUpdateArgs!]!): [UserImage]
-  deleteUserImage(where: UserImageWhereUniqueInput!): UserImage
-  deleteUserImages(where: [UserImageWhereUniqueInput!]!): [UserImage]
   createList(data: ListCreateInput!): List
   createLists(data: [ListCreateInput!]!): [List]
   updateList(where: ListWhereUniqueInput!, data: ListUpdateInput!): List
@@ -692,15 +535,6 @@ type Mutation {
   updateGifts(data: [GiftUpdateArgs!]!): [Gift]
   deleteGift(where: GiftWhereUniqueInput!): Gift
   deleteGifts(where: [GiftWhereUniqueInput!]!): [Gift]
-  createGiftImage(data: GiftImageCreateInput!): GiftImage
-  createGiftImages(data: [GiftImageCreateInput!]!): [GiftImage]
-  updateGiftImage(
-    where: GiftImageWhereUniqueInput!
-    data: GiftImageUpdateInput!
-  ): GiftImage
-  updateGiftImages(data: [GiftImageUpdateArgs!]!): [GiftImage]
-  deleteGiftImage(where: GiftImageWhereUniqueInput!): GiftImage
-  deleteGiftImages(where: [GiftImageWhereUniqueInput!]!): [GiftImage]
   endSession: Boolean!
   authenticateUserWithPassword(
     email: String!
@@ -756,14 +590,6 @@ type Query {
   ): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
-  userImages(
-    where: UserImageWhereInput! = {}
-    orderBy: [UserImageOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [UserImage!]
-  userImage(where: UserImageWhereUniqueInput!): UserImage
-  userImagesCount(where: UserImageWhereInput! = {}): Int
   lists(
     where: ListWhereInput! = {}
     orderBy: [ListOrderByInput!]! = []
@@ -788,14 +614,6 @@ type Query {
   ): [Gift!]
   gift(where: GiftWhereUniqueInput!): Gift
   giftsCount(where: GiftWhereInput! = {}): Int
-  giftImages(
-    where: GiftImageWhereInput! = {}
-    orderBy: [GiftImageOrderByInput!]! = []
-    take: Int
-    skip: Int! = 0
-  ): [GiftImage!]
-  giftImage(where: GiftImageWhereUniqueInput!): GiftImage
-  giftImagesCount(where: GiftImageWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(

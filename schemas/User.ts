@@ -4,6 +4,7 @@ import {
   password,
   relationship,
   checkbox,
+  image,
 } from '@keystone-6/core/fields';
 
 export const User = list({
@@ -19,15 +20,9 @@ export const User = list({
     }),
 
     password: password(),
-    photo: relationship({
-      ref: 'UserImage.user',
-      ui: {
-        displayMode: 'cards',
-        cardFields: ['image', 'altText'],
-        inlineCreate: { fields: ['image', 'altText'] },
-        inlineEdit: { fields: ['image', 'altText'] },
-      },
+    photo: image({
       label: 'Photo',
+      storage: 's3_images',
     }),
     lists: relationship({
       ref: 'List.user',

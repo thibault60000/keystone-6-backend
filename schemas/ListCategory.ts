@@ -4,6 +4,7 @@ import { list } from '@keystone-6/core';
 export const ListCategory = list({
   fields: {
     name: text({ validation: { isRequired: true }, label: 'Nom' }),
+    // Icon : https://fontawesome.com/icons
     icon: text({ validation: { isRequired: true }, label: 'Icone' }),
     primaryColor: text({
       validation: { isRequired: true },

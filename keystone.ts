@@ -1,10 +1,24 @@
 import { config } from '@keystone-6/core';
+import dotenv from 'dotenv';
 import { withAuth, session } from './auth';
 import { lists } from './schema';
 import { extendGraphqlSchema } from './resolvers/index';
 
+const baseUrl = process.env.BASE_URL || 'http://localhost:3008';
+
 export default withAuth(
   config({
+    storage: {
+      s3_images: {
+        kind: 's3',
+        type: 'image',
+        bucketName: process.env.S3_BUCKET_NAME || '',
+        region: process.env.S3_REGION || 'eu-west-3',
+        accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        signed: { expiry: 5000 },
+      },
+    },
     // -- GraphQL
     graphql: {
       playground: true,
