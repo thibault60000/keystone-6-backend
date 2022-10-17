@@ -20,6 +20,8 @@ model User {
   password                String?
   photo                   UserImage? @relation("User_photo", fields: [photoId], references: [id])
   photoId                 String?    @unique @map("photo")
+  lists                   List[]     @relation("List_user")
+  gifts                   Gift[]     @relation("Gift_user")
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?
@@ -30,4 +32,57 @@ model UserImage {
   image   Json?
   altText String @default("")
   user    User?  @relation("User_photo")
+}
+
+model List {
+  id          String        @id @default(cuid())
+  name        String        @default("")
+  category    ListCategory? @relation("List_category", fields: [categoryId], references: [id])
+  categoryId  String?       @map("category")
+  updated_at  DateTime?     @updatedAt
+  date        DateTime?     @postgresql.Date
+  description String        @default("")
+  user        User?         @relation("List_user", fields: [userId], references: [id])
+  userId      String?       @map("user")
+
+  @@index([categoryId])
+  @@index([userId])
+}
+
+model ListCategory {
+  id             String @id @default(cuid())
+  name           String @default("")
+  icon           String @default("")
+  primaryColor   String @default("")
+  secondaryColor String @default("")
+  lists          List[] @relation("List_category")
+}
+
+model Gift {
+  id          String     @id @default(cuid())
+  name        String     @default("")
+  link        String     @default("")
+  price       Float
+  description String     @default("")
+  quantity    Int
+  degree      Int
+  image       GiftImage? @relation("Gift_image", fields: [imageId], references: [id])
+  imageId     String?    @unique @map("image")
+  color       String     @default("")
+  size        String     @default("")
+  reserved    Boolean    @default(false)
+  updated_at  DateTime?  @updatedAt
+  date        DateTime?  @postgresql.Date
+  reservedBy  String     @default("")
+  user        User?      @relation("Gift_user", fields: [userId], references: [id])
+  userId      String?    @map("user")
+
+  @@index([userId])
+}
+
+model GiftImage {
+  id      String @id @default(cuid())
+  image   Json?
+  altText String @default("")
+  gift    Gift?  @relation("Gift_image")
 }

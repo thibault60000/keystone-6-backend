@@ -19,7 +19,6 @@ export const User = list({
     }),
 
     password: password(),
-    // Photo
     photo: relationship({
       ref: 'UserImage.user',
       ui: {
@@ -30,31 +29,13 @@ export const User = list({
       },
       label: 'Photo',
     }),
-
-    // cart: relationship({
-    //   ref: 'CartItem.user',
-    //   many: true,
-    //   ui: {
-    //     createView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'read' },
-    //   },
-    // }),
-
-    // Order
-    // orders: relationship({
-    //   ref: 'Order.user',
-    //   many: true,
-    // }),
-
-    // Role
-    // role: relationship({
-    //   ref: 'Role.assignedTo',
-    // }),
-
-    // Products
-    // products: relationship({
-    //   ref: 'Product.user',
-    //   many: true,
-    // }),
+    lists: relationship({
+      ref: 'List.user',
+      many: true,
+    }),
+    gifts: relationship({
+      ref: 'Gift.user',
+      many: true,
+    }),
   },
 });

@@ -8,6 +8,20 @@ type User {
   email: String
   password: PasswordState
   photo: UserImage
+  lists(
+    where: ListWhereInput! = {}
+    orderBy: [ListOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [List!]
+  listsCount(where: ListWhereInput! = {}): Int
+  gifts(
+    where: GiftWhereInput! = {}
+    orderBy: [GiftOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Gift!]
+  giftsCount(where: GiftWhereInput! = {}): Int
   passwordResetToken: PasswordState
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -35,6 +49,8 @@ input UserWhereInput {
   email: StringFilter
   password: PasswordFilter
   photo: UserImageWhereInput
+  lists: ListManyRelationFilter
+  gifts: GiftManyRelationFilter
   passwordResetToken: PasswordFilter
   passwordResetIssuedAt: DateTimeNullableFilter
   passwordResetRedeemedAt: DateTimeNullableFilter
@@ -94,6 +110,18 @@ input PasswordFilter {
   isSet: Boolean!
 }
 
+input ListManyRelationFilter {
+  every: ListWhereInput
+  some: ListWhereInput
+  none: ListWhereInput
+}
+
+input GiftManyRelationFilter {
+  every: GiftWhereInput
+  some: GiftWhereInput
+  none: GiftWhereInput
+}
+
 input DateTimeNullableFilter {
   equals: DateTime
   in: [DateTime!]
@@ -125,6 +153,8 @@ input UserUpdateInput {
   email: String
   password: String
   photo: UserImageRelateToOneForUpdateInput
+  lists: ListRelateToManyForUpdateInput
+  gifts: GiftRelateToManyForUpdateInput
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -134,6 +164,20 @@ input UserImageRelateToOneForUpdateInput {
   create: UserImageCreateInput
   connect: UserImageWhereUniqueInput
   disconnect: Boolean
+}
+
+input ListRelateToManyForUpdateInput {
+  disconnect: [ListWhereUniqueInput!]
+  set: [ListWhereUniqueInput!]
+  create: [ListCreateInput!]
+  connect: [ListWhereUniqueInput!]
+}
+
+input GiftRelateToManyForUpdateInput {
+  disconnect: [GiftWhereUniqueInput!]
+  set: [GiftWhereUniqueInput!]
+  create: [GiftCreateInput!]
+  connect: [GiftWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -147,6 +191,8 @@ input UserCreateInput {
   email: String
   password: String
   photo: UserImageRelateToOneForCreateInput
+  lists: ListRelateToManyForCreateInput
+  gifts: GiftRelateToManyForCreateInput
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -155,6 +201,16 @@ input UserCreateInput {
 input UserImageRelateToOneForCreateInput {
   create: UserImageCreateInput
   connect: UserImageWhereUniqueInput
+}
+
+input ListRelateToManyForCreateInput {
+  create: [ListCreateInput!]
+  connect: [ListWhereUniqueInput!]
+}
+
+input GiftRelateToManyForCreateInput {
+  create: [GiftCreateInput!]
+  connect: [GiftWhereUniqueInput!]
 }
 
 type UserImage {
@@ -264,6 +320,333 @@ input UserRelateToOneForCreateInput {
   connect: UserWhereUniqueInput
 }
 
+type List {
+  id: ID!
+  name: String
+  category: ListCategory
+  updated_at: DateTime
+  date: CalendarDay
+  description: String
+  user: User
+}
+
+scalar CalendarDay
+  @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
+
+input ListWhereUniqueInput {
+  id: ID
+}
+
+input ListWhereInput {
+  AND: [ListWhereInput!]
+  OR: [ListWhereInput!]
+  NOT: [ListWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  category: ListCategoryWhereInput
+  updated_at: DateTimeNullableFilter
+  date: CalendarDayNullableFilter
+  description: StringFilter
+  user: UserWhereInput
+}
+
+input CalendarDayNullableFilter {
+  equals: CalendarDay
+  in: [CalendarDay!]
+  notIn: [CalendarDay!]
+  lt: CalendarDay
+  lte: CalendarDay
+  gt: CalendarDay
+  gte: CalendarDay
+  not: CalendarDayNullableFilter
+}
+
+input ListOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  updated_at: OrderDirection
+  date: OrderDirection
+  description: OrderDirection
+}
+
+input ListUpdateInput {
+  name: String
+  category: ListCategoryRelateToOneForUpdateInput
+  updated_at: DateTime
+  date: CalendarDay
+  description: String
+  user: UserRelateToOneForUpdateInput
+}
+
+input ListCategoryRelateToOneForUpdateInput {
+  create: ListCategoryCreateInput
+  connect: ListCategoryWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ListUpdateArgs {
+  where: ListWhereUniqueInput!
+  data: ListUpdateInput!
+}
+
+input ListCreateInput {
+  name: String
+  category: ListCategoryRelateToOneForCreateInput
+  updated_at: DateTime
+  date: CalendarDay
+  description: String
+  user: UserRelateToOneForCreateInput
+}
+
+input ListCategoryRelateToOneForCreateInput {
+  create: ListCategoryCreateInput
+  connect: ListCategoryWhereUniqueInput
+}
+
+type ListCategory {
+  id: ID!
+  name: String
+  icon: String
+  primaryColor: String
+  secondaryColor: String
+  lists(
+    where: ListWhereInput! = {}
+    orderBy: [ListOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [List!]
+  listsCount(where: ListWhereInput! = {}): Int
+}
+
+input ListCategoryWhereUniqueInput {
+  id: ID
+}
+
+input ListCategoryWhereInput {
+  AND: [ListCategoryWhereInput!]
+  OR: [ListCategoryWhereInput!]
+  NOT: [ListCategoryWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  icon: StringFilter
+  primaryColor: StringFilter
+  secondaryColor: StringFilter
+  lists: ListManyRelationFilter
+}
+
+input ListCategoryOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  icon: OrderDirection
+  primaryColor: OrderDirection
+  secondaryColor: OrderDirection
+}
+
+input ListCategoryUpdateInput {
+  name: String
+  icon: String
+  primaryColor: String
+  secondaryColor: String
+  lists: ListRelateToManyForUpdateInput
+}
+
+input ListCategoryUpdateArgs {
+  where: ListCategoryWhereUniqueInput!
+  data: ListCategoryUpdateInput!
+}
+
+input ListCategoryCreateInput {
+  name: String
+  icon: String
+  primaryColor: String
+  secondaryColor: String
+  lists: ListRelateToManyForCreateInput
+}
+
+type Gift {
+  id: ID!
+  name: String
+  link: String
+  price: Float
+  description: String
+  quantity: Int
+  degree: Int
+  image: GiftImage
+  color: String
+  size: String
+  reserved: Boolean
+  updated_at: DateTime
+  date: CalendarDay
+  reservedBy: String
+  user: User
+}
+
+input GiftWhereUniqueInput {
+  id: ID
+}
+
+input GiftWhereInput {
+  AND: [GiftWhereInput!]
+  OR: [GiftWhereInput!]
+  NOT: [GiftWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  link: StringFilter
+  price: FloatFilter
+  description: StringFilter
+  quantity: IntFilter
+  degree: IntFilter
+  image: GiftImageWhereInput
+  color: StringFilter
+  size: StringFilter
+  reserved: BooleanFilter
+  updated_at: DateTimeNullableFilter
+  date: CalendarDayNullableFilter
+  reservedBy: StringFilter
+  user: UserWhereInput
+}
+
+input FloatFilter {
+  equals: Float
+  in: [Float!]
+  notIn: [Float!]
+  lt: Float
+  lte: Float
+  gt: Float
+  gte: Float
+  not: FloatFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input GiftOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  link: OrderDirection
+  price: OrderDirection
+  description: OrderDirection
+  quantity: OrderDirection
+  degree: OrderDirection
+  color: OrderDirection
+  size: OrderDirection
+  reserved: OrderDirection
+  updated_at: OrderDirection
+  date: OrderDirection
+  reservedBy: OrderDirection
+}
+
+input GiftUpdateInput {
+  name: String
+  link: String
+  price: Float
+  description: String
+  quantity: Int
+  degree: Int
+  image: GiftImageRelateToOneForUpdateInput
+  color: String
+  size: String
+  reserved: Boolean
+  updated_at: DateTime
+  date: CalendarDay
+  reservedBy: String
+  user: UserRelateToOneForUpdateInput
+}
+
+input GiftImageRelateToOneForUpdateInput {
+  create: GiftImageCreateInput
+  connect: GiftImageWhereUniqueInput
+  disconnect: Boolean
+}
+
+input GiftUpdateArgs {
+  where: GiftWhereUniqueInput!
+  data: GiftUpdateInput!
+}
+
+input GiftCreateInput {
+  name: String
+  link: String
+  price: Float
+  description: String
+  quantity: Int
+  degree: Int
+  image: GiftImageRelateToOneForCreateInput
+  color: String
+  size: String
+  reserved: Boolean
+  updated_at: DateTime
+  date: CalendarDay
+  reservedBy: String
+  user: UserRelateToOneForCreateInput
+}
+
+input GiftImageRelateToOneForCreateInput {
+  create: GiftImageCreateInput
+  connect: GiftImageWhereUniqueInput
+}
+
+type GiftImage {
+  id: ID!
+  image: CloudinaryImage_File
+  altText: String
+  gift: Gift
+}
+
+input GiftImageWhereUniqueInput {
+  id: ID
+}
+
+input GiftImageWhereInput {
+  AND: [GiftImageWhereInput!]
+  OR: [GiftImageWhereInput!]
+  NOT: [GiftImageWhereInput!]
+  id: IDFilter
+  altText: StringFilter
+  gift: GiftWhereInput
+}
+
+input GiftImageOrderByInput {
+  id: OrderDirection
+  altText: OrderDirection
+}
+
+input GiftImageUpdateInput {
+  image: Upload
+  altText: String
+  gift: GiftRelateToOneForUpdateInput
+}
+
+input GiftRelateToOneForUpdateInput {
+  create: GiftCreateInput
+  connect: GiftWhereUniqueInput
+  disconnect: Boolean
+}
+
+input GiftImageUpdateArgs {
+  where: GiftImageWhereUniqueInput!
+  data: GiftImageUpdateInput!
+}
+
+input GiftImageCreateInput {
+  image: Upload
+  altText: String
+  gift: GiftRelateToOneForCreateInput
+}
+
+input GiftRelateToOneForCreateInput {
+  create: GiftCreateInput
+  connect: GiftWhereUniqueInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -288,6 +671,36 @@ type Mutation {
   updateUserImages(data: [UserImageUpdateArgs!]!): [UserImage]
   deleteUserImage(where: UserImageWhereUniqueInput!): UserImage
   deleteUserImages(where: [UserImageWhereUniqueInput!]!): [UserImage]
+  createList(data: ListCreateInput!): List
+  createLists(data: [ListCreateInput!]!): [List]
+  updateList(where: ListWhereUniqueInput!, data: ListUpdateInput!): List
+  updateLists(data: [ListUpdateArgs!]!): [List]
+  deleteList(where: ListWhereUniqueInput!): List
+  deleteLists(where: [ListWhereUniqueInput!]!): [List]
+  createListCategory(data: ListCategoryCreateInput!): ListCategory
+  createListCategories(data: [ListCategoryCreateInput!]!): [ListCategory]
+  updateListCategory(
+    where: ListCategoryWhereUniqueInput!
+    data: ListCategoryUpdateInput!
+  ): ListCategory
+  updateListCategories(data: [ListCategoryUpdateArgs!]!): [ListCategory]
+  deleteListCategory(where: ListCategoryWhereUniqueInput!): ListCategory
+  deleteListCategories(where: [ListCategoryWhereUniqueInput!]!): [ListCategory]
+  createGift(data: GiftCreateInput!): Gift
+  createGifts(data: [GiftCreateInput!]!): [Gift]
+  updateGift(where: GiftWhereUniqueInput!, data: GiftUpdateInput!): Gift
+  updateGifts(data: [GiftUpdateArgs!]!): [Gift]
+  deleteGift(where: GiftWhereUniqueInput!): Gift
+  deleteGifts(where: [GiftWhereUniqueInput!]!): [Gift]
+  createGiftImage(data: GiftImageCreateInput!): GiftImage
+  createGiftImages(data: [GiftImageCreateInput!]!): [GiftImage]
+  updateGiftImage(
+    where: GiftImageWhereUniqueInput!
+    data: GiftImageUpdateInput!
+  ): GiftImage
+  updateGiftImages(data: [GiftImageUpdateArgs!]!): [GiftImage]
+  deleteGiftImage(where: GiftImageWhereUniqueInput!): GiftImage
+  deleteGiftImages(where: [GiftImageWhereUniqueInput!]!): [GiftImage]
   endSession: Boolean!
   authenticateUserWithPassword(
     email: String!
@@ -351,6 +764,38 @@ type Query {
   ): [UserImage!]
   userImage(where: UserImageWhereUniqueInput!): UserImage
   userImagesCount(where: UserImageWhereInput! = {}): Int
+  lists(
+    where: ListWhereInput! = {}
+    orderBy: [ListOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [List!]
+  list(where: ListWhereUniqueInput!): List
+  listsCount(where: ListWhereInput! = {}): Int
+  listCategories(
+    where: ListCategoryWhereInput! = {}
+    orderBy: [ListCategoryOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [ListCategory!]
+  listCategory(where: ListCategoryWhereUniqueInput!): ListCategory
+  listCategoriesCount(where: ListCategoryWhereInput! = {}): Int
+  gifts(
+    where: GiftWhereInput! = {}
+    orderBy: [GiftOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Gift!]
+  gift(where: GiftWhereUniqueInput!): Gift
+  giftsCount(where: GiftWhereInput! = {}): Int
+  giftImages(
+    where: GiftImageWhereInput! = {}
+    orderBy: [GiftImageOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [GiftImage!]
+  giftImage(where: GiftImageWhereUniqueInput!): GiftImage
+  giftImagesCount(where: GiftImageWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(

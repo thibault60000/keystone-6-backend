@@ -31,6 +31,7 @@ export default withAuth(
     },
     db: {
       provider: 'postgresql',
+      enableLogging: true,
       url: process.env.DATABASE_URL || '',
       // TODO : Add seed data on 'onConnect' method
     },
