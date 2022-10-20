@@ -4,6 +4,7 @@
 type User {
   id: ID!
   name: String
+  firstName: String
   isAdmin: Boolean
   email: String
   password: PasswordState
@@ -61,6 +62,7 @@ input UserWhereInput {
   NOT: [UserWhereInput!]
   id: IDFilter
   name: StringFilter
+  firstName: StringFilter
   isAdmin: BooleanFilter
   email: StringFilter
   password: PasswordFilter
@@ -151,6 +153,7 @@ input DateTimeNullableFilter {
 input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  firstName: OrderDirection
   isAdmin: OrderDirection
   email: OrderDirection
   passwordResetIssuedAt: OrderDirection
@@ -164,6 +167,7 @@ enum OrderDirection {
 
 input UserUpdateInput {
   name: String
+  firstName: String
   isAdmin: Boolean
   email: String
   password: String
@@ -205,6 +209,7 @@ input UserUpdateArgs {
 
 input UserCreateInput {
   name: String
+  firstName: String
   isAdmin: Boolean
   email: String
   password: String

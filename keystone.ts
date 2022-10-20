@@ -1,10 +1,25 @@
 import { config } from '@keystone-6/core';
+import { statelessSessions } from '@keystone-6/core/session';
 import dotenv from 'dotenv';
-import { withAuth, session } from './auth';
+import { withAuth } from './auth';
 import { lists } from './schema';
 import { extendGraphqlSchema } from './resolvers/index';
 
-const baseUrl = process.env.BASE_URL || 'http://localhost:3008';
+dotenv.config();
+
+export interface Session {
+  itemId: string;
+  listKey: string;
+  data: {
+    name: string;
+    email: string;
+  };
+}
+
+const session = {
+  maxAge: 60 * 60 * 24 * 360,
+  secret: process.env.COOKIE_SECRET || 'cookie-dev',
+};
 
 export default withAuth(
   config({
@@ -24,7 +39,7 @@ export default withAuth(
       playground: true,
       cors: {
         origin: [
-          process.env.FRONTEND_URL || false,
+          process.env.FRONTEND_URL || 'http://localhost:3000',
           'https://studio.apollographql.com',
           'http://localhost:3008',
         ],
@@ -35,7 +50,7 @@ export default withAuth(
       port: Number(process.env.PORT) || 3008,
       cors: {
         origin: [
-          process.env.FRONTEND_URL || 'http://localhost:7777',
+          process.env.FRONTEND_URL || 'http://localhost:3000',
           'https://studio.apollographql.com',
         ],
         credentials: true,
@@ -45,16 +60,16 @@ export default withAuth(
     },
     db: {
       provider: 'postgresql',
-      enableLogging: true,
-      url: process.env.DATABASE_URL || '',
-      // TODO : Add seed data on 'onConnect' method
+      url: process.env.DATABASE_URL || 'postgres://localhost/keystone',
     },
     ui: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      isAccessAllowed: (context) => !!context.session?.data,
+      isAccessAllowed: (context): boolean => {
+        const activeSession = context.session as Session;
+        return !!activeSession?.data;
+      },
     },
     lists,
     extendGraphqlSchema,
-    session,
+    session: statelessSessions(session),
   })
 );

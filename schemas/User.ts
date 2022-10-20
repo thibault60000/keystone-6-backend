@@ -12,6 +12,9 @@ export const User = list({
     name: text({
       validation: { isRequired: true },
     }),
+    firstName: text({
+      validation: { isRequired: false },
+    }),
     isAdmin: checkbox(),
     email: text({
       validation: { isRequired: true },

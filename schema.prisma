@@ -15,6 +15,7 @@ generator client {
 model User {
   id                      String    @id @default(cuid())
   name                    String    @default("")
+  firstName               String    @default("")
   isAdmin                 Boolean   @default(false)
   email                   String    @unique @default("")
   password                String?
