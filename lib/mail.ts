@@ -1,5 +1,9 @@
 import 'dotenv/config';
-import { createTransport, getTestMessageUrl } from 'nodemailer';
+import {
+  createTransport,
+  getTestMessageUrl,
+  TransportOptions,
+} from 'nodemailer';
 
 const transport = createTransport({
   host: process.env.MAIL_HOST,
@@ -8,22 +12,28 @@ const transport = createTransport({
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
   },
-} as any);
+} as TransportOptions);
 
-function makeANiceEmail(text: string): string {
+function createEmailContent(resetToken: string) {
+  const url = `${
+    process.env.FRONTEND_URL || 'http://localhost:3000'
+  }/reset?token=${resetToken}`;
+
+  console.log('Reset token', resetToken);
+  console.log('Make a nice email : ', url);
   return `
-        <div style="
-            border: 1px;
-            padding: 20px;
-            font-family: sans-serif;
-            line-height: 2;
-            font-size: 20px;
-        >
-            <h2> Bonjour, </h2>
-            <p> ${text} </p>
-            <p> Thibault </p>
-        </div>
-    `;
+      <div style="
+          border: 1px;
+          padding: 20px;
+          font-family: sans-serif;
+          line-height: 2;
+          font-size: 20px;"
+      >
+          <h2> Bonjour, </h2>
+          <a href="${url}" /> Votre lien de récupération de mot de passe </a>
+          <p> Thibault </p>
+      </div>
+  `;
 }
 
 export interface Envelope {
@@ -43,6 +53,13 @@ export interface MailResponse {
   messageId: string;
 }
 
+export interface Info {
+  to: string;
+  from: string;
+  subject: string;
+  html: string;
+}
+
 export async function sendPasswordResetEmail(
   resetToken: string,
   to: string
@@ -50,16 +67,12 @@ export async function sendPasswordResetEmail(
   console.log('Frontend URL', process.env.FRONTEND_URL);
   console.log('Mail user', process.env.MAIL_USER);
 
-  const info = await transport.sendMail({
+  const info: any = await transport.sendMail({
     to,
     from: 'test@example.com',
     subject: 'Votre lien de récupération de mot de passe',
-    html: makeANiceEmail(`
-
-        <a href="${
-          process.env.FRONTEND_URL || ''
-        }/reset?token=${resetToken}" /> Votre lien de récupération de mot de passe </a> `),
-  });
+    html: createEmailContent(resetToken),
+  } as Info);
 
   if ((process.env.MAIL_USER || '').includes('ethereal.email')) {
     console.log(
