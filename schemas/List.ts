@@ -31,6 +31,10 @@ export const List = list({
       validation: { isRequired: true },
       label: 'Description',
     }),
+    gifts: relationship({
+      ref: 'Gift.list',
+      many: true,
+    }),
     user: relationship({
       ref: 'User.lists',
       hooks: {

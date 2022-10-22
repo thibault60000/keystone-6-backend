@@ -39,6 +39,7 @@ model List {
   updated_at  DateTime?     @updatedAt
   date        DateTime?     @postgresql.Date
   description String        @default("")
+  gifts       Gift[]        @relation("Gift_list")
   user        User?         @relation("List_user", fields: [userId], references: [id])
   userId      String?       @map("user")
 
@@ -47,12 +48,9 @@ model List {
 }
 
 model ListCategory {
-  id             String @id @default(cuid())
-  name           String @default("")
-  icon           String @default("")
-  primaryColor   String @default("")
-  secondaryColor String @default("")
-  lists          List[] @relation("List_category")
+  id    String @id @default(cuid())
+  name  String @default("")
+  lists List[] @relation("List_category")
 }
 
 model Gift {
@@ -74,8 +72,11 @@ model Gift {
   updated_at      DateTime? @updatedAt
   date            DateTime? @postgresql.Date
   reservedBy      String    @default("")
+  list            List?     @relation("Gift_list", fields: [listId], references: [id])
+  listId          String?   @map("list")
   user            User?     @relation("Gift_user", fields: [userId], references: [id])
   userId          String?   @map("user")
 
+  @@index([listId])
   @@index([userId])
 }

@@ -13,13 +13,15 @@ const { withAuth } = createAuth({
   passwordResetLink: {
     async sendToken(args) {
       /*
-        itemId '24324324325R1',
-        identity: 'test@gmail.com',
-        token: '908501232141'
+        itemId: The ID of the user requesting the password reset.
+        identity: The identity value provided to the sendUserPasswordResetLink mutation.
+        token: The token the user must supply to use redeemUserPasswordResetToken.
+        context: A KeystoneContext object.
       */
       const { token, identity } = args;
       await sendPasswordResetEmail(token, identity);
     },
+    tokensValidForMins: 2 * 60, // default 10 minutes
   },
 });
 

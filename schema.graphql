@@ -238,6 +238,13 @@ type List {
   updated_at: DateTime
   date: CalendarDay
   description: String
+  gifts(
+    where: GiftWhereInput! = {}
+    orderBy: [GiftOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Gift!]
+  giftsCount(where: GiftWhereInput! = {}): Int
   user: User
 }
 
@@ -258,6 +265,7 @@ input ListWhereInput {
   updated_at: DateTimeNullableFilter
   date: CalendarDayNullableFilter
   description: StringFilter
+  gifts: GiftManyRelationFilter
   user: UserWhereInput
 }
 
@@ -286,6 +294,7 @@ input ListUpdateInput {
   updated_at: DateTime
   date: CalendarDay
   description: String
+  gifts: GiftRelateToManyForUpdateInput
   user: UserRelateToOneForUpdateInput
 }
 
@@ -312,6 +321,7 @@ input ListCreateInput {
   updated_at: DateTime
   date: CalendarDay
   description: String
+  gifts: GiftRelateToManyForCreateInput
   user: UserRelateToOneForCreateInput
 }
 
@@ -328,9 +338,6 @@ input UserRelateToOneForCreateInput {
 type ListCategory {
   id: ID!
   name: String
-  icon: String
-  primaryColor: String
-  secondaryColor: String
   lists(
     where: ListWhereInput! = {}
     orderBy: [ListOrderByInput!]! = []
@@ -350,25 +357,16 @@ input ListCategoryWhereInput {
   NOT: [ListCategoryWhereInput!]
   id: IDFilter
   name: StringFilter
-  icon: StringFilter
-  primaryColor: StringFilter
-  secondaryColor: StringFilter
   lists: ListManyRelationFilter
 }
 
 input ListCategoryOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  icon: OrderDirection
-  primaryColor: OrderDirection
-  secondaryColor: OrderDirection
 }
 
 input ListCategoryUpdateInput {
   name: String
-  icon: String
-  primaryColor: String
-  secondaryColor: String
   lists: ListRelateToManyForUpdateInput
 }
 
@@ -379,9 +377,6 @@ input ListCategoryUpdateArgs {
 
 input ListCategoryCreateInput {
   name: String
-  icon: String
-  primaryColor: String
-  secondaryColor: String
   lists: ListRelateToManyForCreateInput
 }
 
@@ -400,6 +395,7 @@ type Gift {
   updated_at: DateTime
   date: CalendarDay
   reservedBy: String
+  list: List
   user: User
 }
 
@@ -424,6 +420,7 @@ input GiftWhereInput {
   updated_at: DateTimeNullableFilter
   date: CalendarDayNullableFilter
   reservedBy: StringFilter
+  list: ListWhereInput
   user: UserWhereInput
 }
 
@@ -479,7 +476,14 @@ input GiftUpdateInput {
   updated_at: DateTime
   date: CalendarDay
   reservedBy: String
+  list: ListRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
+}
+
+input ListRelateToOneForUpdateInput {
+  create: ListCreateInput
+  connect: ListWhereUniqueInput
+  disconnect: Boolean
 }
 
 input GiftUpdateArgs {
@@ -501,7 +505,13 @@ input GiftCreateInput {
   updated_at: DateTime
   date: CalendarDay
   reservedBy: String
+  list: ListRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
+}
+
+input ListRelateToOneForCreateInput {
+  create: ListCreateInput
+  connect: ListWhereUniqueInput
 }
 
 """

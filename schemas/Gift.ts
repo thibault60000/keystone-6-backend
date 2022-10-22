@@ -58,6 +58,9 @@ export const Gift = list({
     reservedBy: text({
       label: 'Réservé par',
     }),
+    list: relationship({
+      ref: 'List.gifts',
+    }),
     user: relationship({
       ref: 'User.gifts',
       hooks: {
