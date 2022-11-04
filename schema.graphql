@@ -23,6 +23,13 @@ type User {
     skip: Int! = 0
   ): [Gift!]
   giftsCount(where: GiftWhereInput! = {}): Int
+  reservedGifts(
+    where: GiftWhereInput! = {}
+    orderBy: [GiftOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Gift!]
+  reservedGiftsCount(where: GiftWhereInput! = {}): Int
   passwordResetToken: PasswordState
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -68,6 +75,7 @@ input UserWhereInput {
   password: PasswordFilter
   lists: ListManyRelationFilter
   gifts: GiftManyRelationFilter
+  reservedGifts: GiftManyRelationFilter
   passwordResetToken: PasswordFilter
   passwordResetIssuedAt: DateTimeNullableFilter
   passwordResetRedeemedAt: DateTimeNullableFilter
@@ -174,6 +182,7 @@ input UserUpdateInput {
   photo: ImageFieldInput
   lists: ListRelateToManyForUpdateInput
   gifts: GiftRelateToManyForUpdateInput
+  reservedGifts: GiftRelateToManyForUpdateInput
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -216,6 +225,7 @@ input UserCreateInput {
   photo: ImageFieldInput
   lists: ListRelateToManyForCreateInput
   gifts: GiftRelateToManyForCreateInput
+  reservedGifts: GiftRelateToManyForCreateInput
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -245,6 +255,7 @@ type List {
     skip: Int! = 0
   ): [Gift!]
   giftsCount(where: GiftWhereInput! = {}): Int
+  private: Boolean
   user: User
 }
 
@@ -266,6 +277,7 @@ input ListWhereInput {
   date: CalendarDayNullableFilter
   description: StringFilter
   gifts: GiftManyRelationFilter
+  private: BooleanFilter
   user: UserWhereInput
 }
 
@@ -286,6 +298,7 @@ input ListOrderByInput {
   updated_at: OrderDirection
   date: OrderDirection
   description: OrderDirection
+  private: OrderDirection
 }
 
 input ListUpdateInput {
@@ -295,6 +308,7 @@ input ListUpdateInput {
   date: CalendarDay
   description: String
   gifts: GiftRelateToManyForUpdateInput
+  private: Boolean
   user: UserRelateToOneForUpdateInput
 }
 
@@ -322,6 +336,7 @@ input ListCreateInput {
   date: CalendarDay
   description: String
   gifts: GiftRelateToManyForCreateInput
+  private: Boolean
   user: UserRelateToOneForCreateInput
 }
 
@@ -394,7 +409,8 @@ type Gift {
   reserved: Boolean
   updated_at: DateTime
   date: CalendarDay
-  reservedBy: String
+  reservedBy: User
+  anonymousReservedBy: String
   list: List
   user: User
 }
@@ -419,7 +435,8 @@ input GiftWhereInput {
   reserved: BooleanFilter
   updated_at: DateTimeNullableFilter
   date: CalendarDayNullableFilter
-  reservedBy: StringFilter
+  reservedBy: UserWhereInput
+  anonymousReservedBy: StringFilter
   list: ListWhereInput
   user: UserWhereInput
 }
@@ -459,7 +476,7 @@ input GiftOrderByInput {
   reserved: OrderDirection
   updated_at: OrderDirection
   date: OrderDirection
-  reservedBy: OrderDirection
+  anonymousReservedBy: OrderDirection
 }
 
 input GiftUpdateInput {
@@ -475,7 +492,8 @@ input GiftUpdateInput {
   reserved: Boolean
   updated_at: DateTime
   date: CalendarDay
-  reservedBy: String
+  reservedBy: UserRelateToOneForUpdateInput
+  anonymousReservedBy: String
   list: ListRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
 }
@@ -504,7 +522,8 @@ input GiftCreateInput {
   reserved: Boolean
   updated_at: DateTime
   date: CalendarDay
-  reservedBy: String
+  reservedBy: UserRelateToOneForCreateInput
+  anonymousReservedBy: String
   list: ListRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
 }

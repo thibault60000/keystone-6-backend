@@ -1,9 +1,12 @@
+import { KeystoneContext } from '@keystone-6/core/types';
 import { config } from '@keystone-6/core';
 import { statelessSessions } from '@keystone-6/core/session';
 import dotenv from 'dotenv';
 import { withAuth } from './auth';
 import { lists } from './schema';
 import { extendGraphqlSchema } from './resolvers/index';
+
+import { insertSeedData } from './seed-data';
 
 dotenv.config();
 
@@ -61,6 +64,12 @@ export default withAuth(
     db: {
       provider: 'postgresql',
       url: process.env.DATABASE_URL || 'postgres://localhost/keystone',
+      async onConnect(context: KeystoneContext) {
+        console.log('🎠 Check argv', process.argv);
+        if (process.argv.includes('--seed-data')) {
+          await insertSeedData(context);
+        }
+      },
     },
     ui: {
       isAccessAllowed: (context): boolean => {

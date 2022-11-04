@@ -2,6 +2,7 @@ import {
   calendarDay,
   relationship,
   text,
+  checkbox,
   timestamp,
 } from '@keystone-6/core/fields';
 import { list } from '@keystone-6/core';
@@ -28,12 +29,16 @@ export const List = list({
       label: 'Date',
     }),
     description: text({
-      validation: { isRequired: true },
+      // validation: { isRequired: true },
       label: 'Description',
     }),
     gifts: relationship({
       ref: 'Gift.list',
       many: true,
+    }),
+    private: checkbox({
+      label: 'Privée',
+      defaultValue: false,
     }),
     user: relationship({
       ref: 'User.lists',

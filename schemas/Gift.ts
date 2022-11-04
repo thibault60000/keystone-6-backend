@@ -1,3 +1,5 @@
+import { list } from '@keystone-6/core';
+
 import {
   calendarDay,
   checkbox,
@@ -8,8 +10,6 @@ import {
   text,
   timestamp,
 } from '@keystone-6/core/fields';
-
-import { list } from '@keystone-6/core';
 
 export const Gift = list({
   fields: {
@@ -55,8 +55,12 @@ export const Gift = list({
     date: calendarDay({
       label: 'Date de réservation',
     }),
-    reservedBy: text({
+    reservedBy: relationship({
       label: 'Réservé par',
+      ref: 'User.reservedGifts',
+    }),
+    anonymousReservedBy: text({
+      label: 'Réservé par (non connecté)',
     }),
     list: relationship({
       ref: 'List.gifts',

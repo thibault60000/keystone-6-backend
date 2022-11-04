@@ -6,7 +6,6 @@ import {
   checkbox,
   image,
 } from '@keystone-6/core/fields';
-
 export const User = list({
   fields: {
     name: text({
@@ -33,6 +32,10 @@ export const User = list({
     }),
     gifts: relationship({
       ref: 'Gift.user',
+      many: true,
+    }),
+    reservedGifts: relationship({
+      ref: 'Gift.reservedBy',
       many: true,
     }),
   },
