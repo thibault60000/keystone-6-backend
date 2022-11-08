@@ -408,7 +408,7 @@ type Gift {
   size: String
   reserved: Boolean
   updated_at: DateTime
-  date: CalendarDay
+  reservedAt: CalendarDay
   reservedBy: User
   anonymousReservedBy: String
   list: List
@@ -434,7 +434,7 @@ input GiftWhereInput {
   size: StringFilter
   reserved: BooleanFilter
   updated_at: DateTimeNullableFilter
-  date: CalendarDayNullableFilter
+  reservedAt: CalendarDayNullableFilter
   reservedBy: UserWhereInput
   anonymousReservedBy: StringFilter
   list: ListWhereInput
@@ -475,7 +475,7 @@ input GiftOrderByInput {
   size: OrderDirection
   reserved: OrderDirection
   updated_at: OrderDirection
-  date: OrderDirection
+  reservedAt: OrderDirection
   anonymousReservedBy: OrderDirection
 }
 
@@ -491,7 +491,7 @@ input GiftUpdateInput {
   size: String
   reserved: Boolean
   updated_at: DateTime
-  date: CalendarDay
+  reservedAt: CalendarDay
   reservedBy: UserRelateToOneForUpdateInput
   anonymousReservedBy: String
   list: ListRelateToOneForUpdateInput
@@ -521,7 +521,7 @@ input GiftCreateInput {
   size: String
   reserved: Boolean
   updated_at: DateTime
-  date: CalendarDay
+  reservedAt: CalendarDay
   reservedBy: UserRelateToOneForCreateInput
   anonymousReservedBy: String
   list: ListRelateToOneForCreateInput

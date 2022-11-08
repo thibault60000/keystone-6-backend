@@ -72,7 +72,7 @@ model Gift {
   size                String    @default("")
   reserved            Boolean   @default(false)
   updated_at          DateTime? @updatedAt
-  date                DateTime? @postgresql.Date
+  reservedAt          DateTime? @postgresql.Date
   reservedBy          User?     @relation("Gift_reservedBy", fields: [reservedById], references: [id])
   reservedById        String?   @map("reservedBy")
   anonymousReservedBy String    @default("")

@@ -52,7 +52,7 @@ export const Gift = list({
         listView: { fieldMode: 'hidden' },
       },
     }),
-    date: calendarDay({
+    reservedAt: calendarDay({
       label: 'Date de réservation',
     }),
     reservedBy: relationship({
@@ -60,6 +60,7 @@ export const Gift = list({
       ref: 'User.reservedGifts',
     }),
     anonymousReservedBy: text({
+      validation: { isRequired: false },
       label: 'Réservé par (non connecté)',
     }),
     list: relationship({
