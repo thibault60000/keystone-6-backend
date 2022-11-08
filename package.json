@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "keystone dev",
     "start": "keystone start",
-    "build": "keystone build",
+    "build": "next build",
     "postinstall": "keystone postinstall",
     "seed": "keystone dev --seed-data",
     "prisma": "keystone prisma",
