@@ -43,6 +43,7 @@ export default withAuth(
       cors: {
         origin: [
           process.env.FRONTEND_URL || 'http://localhost:3000',
+          'https://keystone-6-frontend.vercel.app/',
           'https://studio.apollographql.com',
           'http://localhost:3008',
         ],
@@ -54,6 +55,7 @@ export default withAuth(
       cors: {
         origin: [
           process.env.FRONTEND_URL || 'http://localhost:3000',
+          'https://keystone-6-frontend.vercel.app/',
           'https://studio.apollographql.com',
         ],
         credentials: true,
