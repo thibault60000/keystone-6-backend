@@ -61,7 +61,6 @@ model Gift {
   link                String    @default("")
   price               Float
   description         String    @default("")
-  quantity            Int
   degree              Int
   image_filesize      Int?
   image_extension     String?
@@ -71,6 +70,7 @@ model Gift {
   color               String    @default("")
   size                String    @default("")
   reserved            Boolean   @default(false)
+  archived            Boolean   @default(false)
   updated_at          DateTime? @updatedAt
   reservedAt          DateTime? @postgresql.Date
   reservedBy          User?     @relation("Gift_reservedBy", fields: [reservedById], references: [id])

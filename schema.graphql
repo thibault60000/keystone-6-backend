@@ -401,12 +401,12 @@ type Gift {
   link: String
   price: Float
   description: String
-  quantity: Int
   degree: Int
   image: ImageFieldOutput
   color: String
   size: String
   reserved: Boolean
+  archived: Boolean
   updated_at: DateTime
   reservedAt: CalendarDay
   reservedBy: User
@@ -428,11 +428,11 @@ input GiftWhereInput {
   link: StringFilter
   price: FloatFilter
   description: StringFilter
-  quantity: IntFilter
   degree: IntFilter
   color: StringFilter
   size: StringFilter
   reserved: BooleanFilter
+  archived: BooleanFilter
   updated_at: DateTimeNullableFilter
   reservedAt: CalendarDayNullableFilter
   reservedBy: UserWhereInput
@@ -469,11 +469,11 @@ input GiftOrderByInput {
   link: OrderDirection
   price: OrderDirection
   description: OrderDirection
-  quantity: OrderDirection
   degree: OrderDirection
   color: OrderDirection
   size: OrderDirection
   reserved: OrderDirection
+  archived: OrderDirection
   updated_at: OrderDirection
   reservedAt: OrderDirection
   anonymousReservedBy: OrderDirection
@@ -484,12 +484,12 @@ input GiftUpdateInput {
   link: String
   price: Float
   description: String
-  quantity: Int
   degree: Int
   image: ImageFieldInput
   color: String
   size: String
   reserved: Boolean
+  archived: Boolean
   updated_at: DateTime
   reservedAt: CalendarDay
   reservedBy: UserRelateToOneForUpdateInput
@@ -514,12 +514,12 @@ input GiftCreateInput {
   link: String
   price: Float
   description: String
-  quantity: Int
   degree: Int
   image: ImageFieldInput
   color: String
   size: String
   reserved: Boolean
+  archived: Boolean
   updated_at: DateTime
   reservedAt: CalendarDay
   reservedBy: UserRelateToOneForCreateInput

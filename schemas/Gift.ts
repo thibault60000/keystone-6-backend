@@ -22,10 +22,6 @@ export const Gift = list({
     description: text({
       label: 'Description',
     }),
-    quantity: integer({
-      validation: { isRequired: true },
-      label: 'Quantité',
-    }),
     degree: integer({
       validation: { isRequired: true },
       label: 'Degré',
@@ -39,6 +35,10 @@ export const Gift = list({
     }),
     reserved: checkbox({
       label: 'Réservé',
+      defaultValue: false,
+    }),
+    archived: checkbox({
+      label: 'Archivé',
       defaultValue: false,
     }),
     updated_at: timestamp({

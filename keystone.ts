@@ -42,8 +42,8 @@ export default withAuth(
       playground: true,
       cors: {
         origin: [
-          process.env.FRONTEND_URL || 'http://localhost:3000',
           'https://keystone-6-frontend.vercel.app/',
+          process.env.FRONTEND_URL || 'http://localhost:3000',
           'https://studio.apollographql.com',
           'http://localhost:3008',
         ],
@@ -54,8 +54,8 @@ export default withAuth(
       port: Number(process.env.PORT) || 3008,
       cors: {
         origin: [
-          process.env.FRONTEND_URL || 'http://localhost:3000',
           'https://keystone-6-frontend.vercel.app/',
+          process.env.FRONTEND_URL || 'http://localhost:3000',
           'https://studio.apollographql.com',
         ],
         credentials: true,
