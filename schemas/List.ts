@@ -40,6 +40,11 @@ export const List = list({
       label: 'Privée',
       defaultValue: false,
     }),
+    userFavorites: relationship({
+      ref: 'User.favoritesLists',
+      many: true,
+      label: 'Utilisateurs qui ont ajouté cette liste à leurs favoris',
+    }),
     user: relationship({
       ref: 'User.lists',
       hooks: {

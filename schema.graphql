@@ -16,6 +16,13 @@ type User {
     skip: Int! = 0
   ): [List!]
   listsCount(where: ListWhereInput! = {}): Int
+  favoritesLists(
+    where: ListWhereInput! = {}
+    orderBy: [ListOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [List!]
+  favoritesListsCount(where: ListWhereInput! = {}): Int
   gifts(
     where: GiftWhereInput! = {}
     orderBy: [GiftOrderByInput!]! = []
@@ -74,6 +81,7 @@ input UserWhereInput {
   email: StringFilter
   password: PasswordFilter
   lists: ListManyRelationFilter
+  favoritesLists: ListManyRelationFilter
   gifts: GiftManyRelationFilter
   reservedGifts: GiftManyRelationFilter
   passwordResetToken: PasswordFilter
@@ -181,6 +189,7 @@ input UserUpdateInput {
   password: String
   photo: ImageFieldInput
   lists: ListRelateToManyForUpdateInput
+  favoritesLists: ListRelateToManyForUpdateInput
   gifts: GiftRelateToManyForUpdateInput
   reservedGifts: GiftRelateToManyForUpdateInput
   passwordResetToken: String
@@ -224,6 +233,7 @@ input UserCreateInput {
   password: String
   photo: ImageFieldInput
   lists: ListRelateToManyForCreateInput
+  favoritesLists: ListRelateToManyForCreateInput
   gifts: GiftRelateToManyForCreateInput
   reservedGifts: GiftRelateToManyForCreateInput
   passwordResetToken: String
@@ -256,6 +266,13 @@ type List {
   ): [Gift!]
   giftsCount(where: GiftWhereInput! = {}): Int
   private: Boolean
+  userFavorites(
+    where: UserWhereInput! = {}
+    orderBy: [UserOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [User!]
+  userFavoritesCount(where: UserWhereInput! = {}): Int
   user: User
 }
 
@@ -278,6 +295,7 @@ input ListWhereInput {
   description: StringFilter
   gifts: GiftManyRelationFilter
   private: BooleanFilter
+  userFavorites: UserManyRelationFilter
   user: UserWhereInput
 }
 
@@ -290,6 +308,12 @@ input CalendarDayNullableFilter {
   gt: CalendarDay
   gte: CalendarDay
   not: CalendarDayNullableFilter
+}
+
+input UserManyRelationFilter {
+  every: UserWhereInput
+  some: UserWhereInput
+  none: UserWhereInput
 }
 
 input ListOrderByInput {
@@ -309,6 +333,7 @@ input ListUpdateInput {
   description: String
   gifts: GiftRelateToManyForUpdateInput
   private: Boolean
+  userFavorites: UserRelateToManyForUpdateInput
   user: UserRelateToOneForUpdateInput
 }
 
@@ -316,6 +341,13 @@ input ListCategoryRelateToOneForUpdateInput {
   create: ListCategoryCreateInput
   connect: ListCategoryWhereUniqueInput
   disconnect: Boolean
+}
+
+input UserRelateToManyForUpdateInput {
+  disconnect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserRelateToOneForUpdateInput {
@@ -337,12 +369,18 @@ input ListCreateInput {
   description: String
   gifts: GiftRelateToManyForCreateInput
   private: Boolean
+  userFavorites: UserRelateToManyForCreateInput
   user: UserRelateToOneForCreateInput
 }
 
 input ListCategoryRelateToOneForCreateInput {
   create: ListCategoryCreateInput
   connect: ListCategoryWhereUniqueInput
+}
+
+input UserRelateToManyForCreateInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserRelateToOneForCreateInput {

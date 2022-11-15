@@ -25,6 +25,7 @@ model User {
   photo_height            Int?
   photo_id                String?
   lists                   List[]    @relation("List_user")
+  favoritesLists          List[]    @relation("List_userFavorites")
   gifts                   Gift[]    @relation("Gift_user")
   reservedGifts           Gift[]    @relation("Gift_reservedBy")
   passwordResetToken      String?
@@ -33,17 +34,18 @@ model User {
 }
 
 model List {
-  id          String        @id @default(cuid())
-  name        String        @default("")
-  category    ListCategory? @relation("List_category", fields: [categoryId], references: [id])
-  categoryId  String?       @map("category")
-  updated_at  DateTime?     @updatedAt
-  date        DateTime?     @postgresql.Date
-  description String        @default("")
-  gifts       Gift[]        @relation("Gift_list")
-  private     Boolean       @default(false)
-  user        User?         @relation("List_user", fields: [userId], references: [id])
-  userId      String?       @map("user")
+  id            String        @id @default(cuid())
+  name          String        @default("")
+  category      ListCategory? @relation("List_category", fields: [categoryId], references: [id])
+  categoryId    String?       @map("category")
+  updated_at    DateTime?     @updatedAt
+  date          DateTime?     @postgresql.Date
+  description   String        @default("")
+  gifts         Gift[]        @relation("Gift_list")
+  private       Boolean       @default(false)
+  userFavorites User[]        @relation("List_userFavorites")
+  user          User?         @relation("List_user", fields: [userId], references: [id])
+  userId        String?       @map("user")
 
   @@index([categoryId])
   @@index([userId])
