@@ -621,6 +621,7 @@ type Mutation {
     token: String!
     password: String!
   ): RedeemUserPasswordResetTokenResult
+  confirmBooking(giftId: ID!): Boolean
 }
 
 union UserAuthenticationWithPasswordResult =
