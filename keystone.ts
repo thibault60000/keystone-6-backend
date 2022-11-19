@@ -22,6 +22,7 @@ export interface Session {
 const session = {
   maxAge: 60 * 60 * 24 * 360,
   secret: process.env.COOKIE_SECRET || 'cookie-dev',
+  // secure: true,
 };
 
 export default withAuth(
@@ -39,7 +40,7 @@ export default withAuth(
     },
     // -- GraphQL
     graphql: {
-      playground: true,
+      playground: 'apollo',
       cors: {
         origin: [
           'https://keystone-6-frontend.vercel.app/',
