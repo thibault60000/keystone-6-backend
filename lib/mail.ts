@@ -45,7 +45,7 @@ function createResetPasswordContent(resetToken: string) {
       >
           <h2> Bonjour, </h2>
           <a href="${url}" /> Votre lien de récupération de mot de passe </a>
-          <p> Liste cadeaus </p>
+          <p> Liste cadeaux </p>
       </div>
   `;
 }
