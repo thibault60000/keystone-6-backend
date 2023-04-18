@@ -65,7 +65,9 @@ export default withAuth(
     },
     db: {
       provider: 'postgresql',
-      url: process.env.DATABASE_URL || 'postgres://localhost/keystone',
+      url:
+        process.env.DATABASE_URL ||
+        'postgres://user:password@poneyshop.cbrsrknogqsn.eu-west-3.rds.amazonaws.com:5432/database',
       async onConnect(context: KeystoneContext) {
         console.log('🎠 Check argv', process.argv);
         if (process.argv.includes('--seed-data')) {
